@@ -24,7 +24,7 @@ public class UserController {
                     request.getHeader("Referer"));
         }
 
-        return "/user/loginPage";
+        return "user/loginPage";
     }
 
     @GetMapping("/")
