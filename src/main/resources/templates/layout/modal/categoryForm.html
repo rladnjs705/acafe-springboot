@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="categoryFormModalFragment">
+    <div class="modal add-cateegory-modal" id="add-cateegory-modal" data-bs-backdrop=true tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>카테고리 관리</h4>
+                    <button type="button" class="btn-close" onclick="closeCategoryForm();"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="mb-3">카테고리 목록</h5>
+
+                    <ul class="category-list">
+                        <li class="mb-3 d-flex justify-content-between">
+                            <p>피자</p>
+                            <div class="edit-box">
+                                <a href="#" class="link"><i class='bx bxs-pencil'></i></a>
+                                <a href="#" class="link"><i class='bx bxs-trash'></i></a>
+                            </div>
+                        </li>
+                        <li class="mb-3">
+                            <input type="text" class="form-control border-line" value="버거">
+                        </li>
+                        <li class="mb-3 d-flex justify-content-between">
+                            <p>사이드</p>
+                            <div class="edit-box">
+                                <a href="#" class="link"><i class='bx bxs-pencil'></i></a>
+                                <a href="#" class="link"><i class='bx bxs-trash'></i></a>
+                            </div>
+                        </li>
+                        <li class="mb-3 d-flex justify-content-between">
+                            <p>음료</p>
+                            <div class="edit-box">
+                                <a href="#" class="link"><i class='bx bxs-pencil'></i></a>
+                                <a href="#" class="link"><i class='bx bxs-trash'></i></a>
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- <div class="input-group">
+                      <input type="text" class="form-control border-line">
+                      <button class="btn btn-primary">등록</button>
+                    </div> -->
+
+                </div>
+
+                <div class="modal-footer d-flex flex-column align-items-stretch">
+                    <div class="input-group">
+                        <input type="text" class="form-control border-line">
+                        <button class="btn btn-primary">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- add-category-modal -->
+</th:block>
+</html>

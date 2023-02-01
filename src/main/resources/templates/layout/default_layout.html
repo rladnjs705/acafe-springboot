@@ -9,20 +9,18 @@
 		<!-- Loading screen -->
 		<th:block th:replace="~{layout/loading :: loadingFragment}"></th:block>
 	
-		<!-- 사이드바-->
-		<th:block th:replace="~{layout/sidebar :: sidebarFragment}"></th:block>
-	
 		<div id="content-wrapper" class="flex flex-col flex-1 min-h-screen overflow-x-hidden overflow-y-auto">
 			<main id="content">
-				<!-- 상단바-->
-				<th:block th:replace="~{layout/topbar :: topbarFragment}"></th:block>
 				<!-- 본문-->
 				<th:block layout:fragment="content"></th:block>
 			</main>
 			<!--/* 푸터 */-->
 	<!--			<th:block th:replace="layout/footer :: footerFragment"></th:block>-->
 		</div>
-	
+
+			<!-- 모달 -->
+			<th:block th:replace="~{layout/modal/menu :: menuModalFragment}"></th:block>
+			<th:block th:replace="~{layout/modal/categoryForm :: categoryFormModalFragment}"></th:block>
 		<!-- 공통 스크립트 -->
 		<th:block layout:fragment="script"></th:block>
 		</div>

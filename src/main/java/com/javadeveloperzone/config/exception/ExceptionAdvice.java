@@ -1,63 +1,32 @@
 package com.javadeveloperzone.config.exception;
 
 
-import com.javadeveloperzone.config.utils.ResponseUtils;
-import com.javadeveloperzone.model.ResponseVo;
-import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.javadeveloperzone.model.ErrorObject;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
 
-import javax.security.sasl.AuthenticationException;
+import java.util.ArrayList;
+import java.util.List;
 
-@ControllerAdvice(annotations = RestController.class)
+@Slf4j
+@ControllerAdvice
 public class ExceptionAdvice {
-	private static final Logger logger = LoggerFactory.getLogger(ExceptionAdvice.class);
 
-	/**
-	 * 인증오류
-	 */
-    @ExceptionHandler(value = AuthenticationException.class)
-    public ResponseEntity<ResponseVo> handleAuthenticationException(AuthenticationException e, HttpServletRequest req, WebRequest request) {
-    	logger.error("Authentication Exception: {}", e);
-
-        return ResponseUtils.response(ResultCodeType.ERROR_AUTH, null);
-    }
-
-    /**
-     * 파라미터 오류
-     */
-    @ExceptionHandler(value = ParamException.class)
-    public ResponseEntity<ResponseVo> handleInvalidParameterException(ParamException e, HttpServletRequest req, WebRequest request) {
-    	logger.error("ParamException Exception: {}", e);
-
-        return ResponseUtils.response(ResultCodeType.ERROR_PARAM, e.getMsg());
-    }
-
-	/**
-	 * 외부연동 오류
-	 */
-	@ExceptionHandler({RestClientException.class, HttpClientErrorException.class})
-    public ResponseEntity<ResponseVo> restTempleteException(Exception e, HttpServletRequest req, WebRequest request) {
-		logger.error("restTempleteException Exception: {}", e);
-
-		return ResponseUtils.response(ResultCodeType.ERROR_REST, null);
-    }
-
-	/**
-	 * 알수없는 오류
-	 */
-	@ExceptionHandler(Exception.class)
-    public ResponseEntity<ResponseVo> commonException(Exception e, HttpServletRequest req, WebRequest request) {
-		logger.error("commonException Exception: {}", e);
-
-		return ResponseUtils.response(ResultCodeType.ERROR_EXCEPTION, null);
-    }
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity processValidationError(MethodArgumentNotValidException exception) {
+		List<ErrorObject> errors = new ArrayList<>();
+		for(FieldError result : exception.getBindingResult().getFieldErrors()){
+			errors.add(new ErrorObject(
+					result.getField(), result.getDefaultMessage()
+			));
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+	}
 
 }
+

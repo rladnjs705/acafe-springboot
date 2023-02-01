@@ -7,6 +7,8 @@ public enum ResultCodeType {
 	ERROR_AUTH(1000, HttpStatus.UNAUTHORIZED, "auth error"),
 	ERROR_USER_NOT_FOUND(1001, HttpStatus.UNAUTHORIZED, "user not found"),
 	ERROR_PWD_NOT_MATCH(1002, HttpStatus.UNAUTHORIZED, "pwd not match"),
+	ERROR_AUTH_EMAIL(1003, HttpStatus.UNAUTHORIZED, "이메일 또는 패스워드 오류입니다."),
+	ERROR_AUTH_DUPLICATE(1003, HttpStatus.UNAUTHORIZED, "이미 생성된 아이디 입니다."),
 	ERROR_PARAM(1100, HttpStatus.BAD_REQUEST, "parameter error"),
 	ERROR_REST(1200, HttpStatus.BAD_REQUEST, "rest error"),
 	ERROR_EXCEL(2000, HttpStatus.INTERNAL_SERVER_ERROR, "excel error"),

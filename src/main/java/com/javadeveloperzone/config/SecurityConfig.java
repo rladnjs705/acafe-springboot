@@ -3,15 +3,18 @@ package com.javadeveloperzone.config;
 import com.javadeveloperzone.config.securityHandler.CustomLogoutSuccessHandler;
 import com.javadeveloperzone.config.securityHandler.RestAuthenticationFailureHandler;
 import com.javadeveloperzone.config.securityHandler.RestAuthenticationSuccessHandler;
-import com.javadeveloperzone.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.javadeveloperzone.service.impl.CustomUserDetailsServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -20,31 +23,28 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsServiceImpl customUserDetailsService;
+//    private final CustomAuthenticationProvider authenticationProvider;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(); // BCryptPasswordEncoder 생성
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    	http.authorizeHttpRequests().requestMatchers("/", "/static/**", "/favicon.ico").permitAll()
+    	http.authorizeHttpRequests().requestMatchers("/", "/user/join", "/user/signup", "/static/**", "/favicon.ico").permitAll()
 //        	.requestMatchers("/users/**", "/admin/**").hasAuthority(ProjectConstants.USER_ROLE)
 //            .requestMatchers("/**").permitAll()
-//                .requestMatchers("/user/**").hasAuthority(ProjectConstants.USER_ROLE)
-//                .requestMatchers("/admin/**").hasAuthority(ProjectConstants.ADMIN_ROLE)
+                .requestMatchers("/user/**").hasAuthority(ProjectConstants.USER_ROLE)
+                .requestMatchers("/admin/**").hasAuthority(ProjectConstants.ADMIN_ROLE)
             .anyRequest().authenticated()
             .and()
             .formLogin()
             .loginPage("/user/loginPage")
             .loginProcessingUrl("/user/login")
+                .usernameParameter("userEmail").passwordParameter("password")
             .defaultSuccessUrl("/user/success")
             .failureHandler(authenticationFailureHandler())
             .successHandler(authenticationSuccessHandler())
@@ -75,10 +75,30 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Autowired
-    public void configureAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        //어떤 UserDetailsService를 사용하고, 어떤 PasswordEncoder를 사용하는지
-        auth.userDetailsService(customUserDetailsService);
+//    @Bean
+//    public AuthenticationManager configureAuthenticationManager(AuthenticationManagerBuilder builder) throws Exception {
+//
+//        builder
+//                .inMemoryAuthentication()
+//                .withUser("admin@admin.com")
+//                .password(passwordEncoder().encode("1234"))
+//                .roles(ProjectConstants.ADMIN_ROLE);
+//        return builder.authenticationProvider(authenticationProvider).build();
+//    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        ProviderManager authenticationManager = (ProviderManager)authenticationConfiguration.getAuthenticationManager();
+        authenticationManager.getProviders().add(customAuthenticationProvider());
+        return authenticationManager;
+    }
+    @Bean
+    public CustomAuthenticationProvider customAuthenticationProvider(){
+        return new CustomAuthenticationProvider(customUserDetailsService,passwordEncoder());
+    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -95,10 +115,6 @@ public class SecurityConfig {
     public LogoutSuccessHandler logoutSuccessHandler() {
         return new CustomLogoutSuccessHandler();
     }
-    
-//    @Bean
-//    public AuthenticationEntryPoint authenticationHandler() {
-//        return new RestAuthenticationEntryPoint();
-//    }
+
 
 }

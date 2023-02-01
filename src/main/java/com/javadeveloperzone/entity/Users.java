@@ -1,46 +1,42 @@
 package com.javadeveloperzone.entity;
 
-import groovyjarjarantlr4.v4.runtime.misc.NotNull;
+import com.javadeveloperzone.domain.Role;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Email;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
-public class Users
+@AllArgsConstructor
+public class Users implements UserDetails
 {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @NotNull
+    @Column(name = "user_id")
     private Long id;
 
-    @NotNull
-    private String username;
-
-    @NotNull
+    @Column
+    @Length(min = 4, max = 100)
     private String password;
 
     @Column(unique=true) //unique=true 해야함.
-    @NotNull
+    @Email
     private String email;
 
-    @Column(nullable=false) // Null이 되면 안됨.
-    @NotNull
-    private String role;
-
-    private String provider;
-
-    private String providerId;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @CreationTimestamp // INSERT 쿼리 시 현재 시간으로 생성
     private LocalDateTime createDate= LocalDateTime.now();
@@ -48,15 +44,47 @@ public class Users
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updatedDate = LocalDateTime.now();
 
+    @OneToMany(mappedBy = "users")
+    private List<Order> orders = new ArrayList<>();
+
     @Builder
-    public Users(String username, String password, String email, String role, String provider, String providerId, LocalDateTime createDate, LocalDateTime updatedDate) {
-        this.username = username;
+    public Users(String password, String email, Role role, LocalDateTime createDate, LocalDateTime updatedDate) {
         this.password = password;
         this.email = email;
         this.role = role;
-        this.provider = provider;
-        this.providerId = providerId;
         this.createDate = createDate;
         this.updatedDate = updatedDate;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> roles = new HashSet<>();
+        roles.add(new SimpleGrantedAuthority(role.getValue()));
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

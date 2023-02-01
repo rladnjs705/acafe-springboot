@@ -1,18 +1,25 @@
 package com.javadeveloperzone.controller;
 
+import com.javadeveloperzone.dto.UserDto;
+import com.javadeveloperzone.dto.UserFormDto;
+import com.javadeveloperzone.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
+    private final UserService userService;
 	@GetMapping("/user/loginPage")
     public String login(HttpServletRequest request) throws Exception {
 
@@ -25,6 +32,29 @@ public class UserController {
         }
 
         return "user/loginPage";
+    }
+
+    @GetMapping("/user/join")
+    public String join( Model model ) throws Exception {
+        model.addAttribute("userFormDto", new UserFormDto());
+        return "user/join";
+    }
+
+    @PostMapping("/user/signup")
+    public String createUser(@Validated UserFormDto userFormDto, BindingResult bindingResult, Model model ) {
+
+        UserDto userDto = userService.createUser(userFormDto);
+
+        if(userDto == null){
+            bindingResult.reject("emailDuplicate", "이미 존재하는 아이디입니다.");
+        }
+
+        if(bindingResult.hasErrors()){
+            log.info("errors={}", bindingResult);
+            return "user/join";
+        }
+
+        return "redirect:user/loginPage";
     }
 
     @GetMapping("/")

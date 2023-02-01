@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="loadingFragment">
-    <div
-            x-ref="loading"
-            class="fixed inset-0 z-50 flex items-center justify-center text-2xl font-semibold text-white bg-primary-darker"
-    >
-        Loading.....
+    <!-- Loading-box start-->
+    <div class="col-12 loading-box" style="display: none">
+        <div class="circles">
+            <i></i>
+            <i></i>
+            <i></i>
+        </div>
+        <p>Loading...</p>
     </div>
+    <!-- Loading-box end-->
 </th:block>
 </html>

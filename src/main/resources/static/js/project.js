@@ -79,11 +79,12 @@ $.ajaxPrefilter(function( options ) {
 
 function request(method, url, params) {
 	getProjectHeader();
-	var ajax = $.ajax({
+	const ajax = $.ajax({
 		type : method,
 		url : url,
 		data : params,
-		dataType : "json"
+		dataType : "json",
+		contentType: 'application/json',
 	});
 	ajax.done(
 			function(data) {

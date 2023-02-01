@@ -5,6 +5,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -14,10 +15,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 @Order(2)
 public class RequestParameterWrapperFilter extends OncePerRequestFilter {
-	private static final Logger logger = LoggerFactory.getLogger(RequestParameterWrapperFilter.class);
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -34,11 +35,5 @@ public class RequestParameterWrapperFilter extends OncePerRequestFilter {
 			return true;
 		}
 		return super.shouldNotFilter(request);
-	}
-
-	@Override
-	public void destroy() {
-		MDC.clear();
-		super.destroy();
 	}
 }

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+
+<head>
+    <script type="text/javascript">
+        function initPage(){
+        }
+
+        function openCategoryForm() {
+            $("#add-cateegory-modal").fadeIn(300).delay(200)
+        }
+
+        function closeCategoryForm() {
+            $("#add-cateegory-modal").fadeOut(300).delay(200)
+        }
+
+        function openMenu() {
+            $("#add-menu-modal").modal({
+                backdrop : true
+            })
+            $("#add-menu-modal").fadeIn(300).delay(200);
+        }
+
+        function closeMenu() {
+            $("#add-menu-modal").fadeOut(300).delay(200)
+        }
+    </script>
+</head>
+
+<div layout:fragment="content">
+    <div class="app d-flex container-fluid">
+
+        <main><!-- main start -->
+            <div class="content d-flex flex-column container-fluid">
+                <div class="main-header-section d-flex flex-column ">
+                    <!-- search start-->
+                    <div class="header-box-top d-flex " >
+                        <h1>스마트 메뉴판</h1>
+                        <input type="text" class="form-control txt-search-menu border-line" placeholder="원하는 메뉴 이름을 입력해주세요.">
+                    </div>
+                    <!-- search end-->
+
+                    <!-- category start -->
+                    <div class="header-box-bottom">
+                        <ul class="d-flex justify-content-start">
+                            <li>
+                                <a href="#null" class="d-flex align-items-center" >모두보기</a>
+                            </li>
+                            <li>
+                                <a  href="#null" class="d-flex align-items-center ">샌드위치</a>
+                            </li>
+                            <li>
+                                <a href="#null" class="d-flex align-items-center selected" >피자</a>
+                            </li>
+                            <li>
+                                <a href="#null" class="d-flex align-items-center" >음료</a>
+                            </li>
+                            <li>
+                                <a href="#null" class="d-flex align-items-center add" onclick="openCategoryForm();">+관리</a>
+<!--                                <a href="#null" class="d-flex align-items-center add" data-toggle="modal" data-target="#add-cateegory-modal">+관리</a>-->
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- category end -->
+                </div><!-- main-header-section -->
+
+                <div class="main-content-section simplebar">
+                    <!-- itemList start -->
+                    <div class="row row-cols-4 g-4 pl-3 pr-3 pt-2 pb-4 list-bg-shadow">
+                        <div class="col mb-2">
+              <span class="btn-add-modal-show" onclick="openMenu();" >
+                <div class="card menu-add-box h-100 d-flex justify-content-center align-items-center">
+                  <i class='bx bx-plus bx-md' ></i>
+                </div>
+              </span>
+                        </div>
+
+                        <div class="col mb-2">
+                            <div class="card ct-shadow-sm menu-item-box">
+<!--                                <img class="img-box" th:src="@{/static/images/food_img/pizza_1.jpg}"/>-->
+                                <div class="img-box" th:style="'background-image:url(' + @{/static/images/food_img/pizza_1.jpg} + ');'"></div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Nomal Pizza</h5>
+                                    <p class="card-text">12,000</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col mb-2">
+                            <div class="card ct-shadow-sm menu-item-box">
+                                <div class="img-box" th:style="'background-image:url(' + @{/static/images/food_img/pizza_2.jpg} + ');'"></div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Nomal Pizza</h5>
+                                    <p class="card-text">12,000</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col mb-2">
+                            <div class="card ct-shadow-sm menu-item-box">
+                                <div class="img-box" th:style="'background-image:url(' + @{/static/images/food_img/pizza_3.jpg} + ');'"></div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Nomal Pizza</h5>
+                                    <p class="card-text">12,000</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col mb-2">
+                            <div class="card ct-shadow-sm menu-item-box">
+                                <div class="img-box-loading" style=""></div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Nomal Pizza</h5>
+                                    <p class="card-text">12,000</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- itemList end -->
+                </div><!-- end main-content-section -->
+            </div>
+        </main><!-- main end -->
+        <aside> <!-- aside start-->
+            <div class="side-header">
+                <div class="title-box d-flex align-items-center justify-content-between pl-4 pr-4 pt-4">
+                    <h2>주문내용</h2>
+                    <span>
+            <a href="#null" ><i class='bx bx-log-in'></i></a>
+            <a href="#null"><i class='bx bxs-cog'></i></a>
+          </span>
+
+                </div>
+                <div class="info-box d-flex justify-content-between align-items-center pl-4 pr-4">
+                    <p>상품 이름</p>
+                    <p>수량</p>
+                </div>
+            </div>
+            <div class="side-content aside-box simplebar mt-auto">
+                <!-- orderList start-->
+                <ul>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                    <li class="d-flex p-4 align-items-center">
+                        <div class="order-title-box d-flex flex-column justify-content-between ">
+                            <h4>마르게리타 피자!!!!!!!</h4>
+                            <p class="price-sum">12,000</p>
+                        </div>
+                        <div class="order-btn-box d-flex justify-content-end ">
+                            <button class="btn btn-ui mr-1"><i class='bx bx-plus' ></i></button>
+                            <input type="text" class="form-control border-line">
+                            <button class="btn btn-ui ml-1"><i class='bx bx-minus'></i></button>
+                        </div>
+                    </li>
+                </ul>
+                <!-- orderList end-->
+            </div>
+            <div class="side-bottom d-flex flex-column justify-content-center align-items-center">
+                <!-- order bottom start -->
+                <div class="side-bottom-header d-flex align-items-center justify-content-center">
+                    <p>
+                        <span class="total-count">50</span>개
+                        <span class="total-price">232,000</span>원 선택
+                    </p>
+                </div>
+                <div class="side-bottom-button-box d-flex flex-column pl-4 pr-4 pb-4 " >
+                    <button class="btn btn-primary h-100">주문하기</button>
+                </div>
+                <!-- order bottom end -->
+            </div>
+        </aside><!-- end aside -->
+    </div><!-- end app -->
+</div>
+</html>

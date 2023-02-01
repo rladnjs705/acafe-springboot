@@ -4,14 +4,13 @@ import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.ContentType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -22,8 +21,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class RequestParameterWrapper extends HttpServletRequestWrapper {
-	private static final Logger logger = LoggerFactory.getLogger(RequestParameterWrapper.class);
 
     private Charset encoding;
     private byte[] rawData;
@@ -32,7 +31,8 @@ public class RequestParameterWrapper extends HttpServletRequestWrapper {
     public RequestParameterWrapper(HttpServletRequest request) {
         super(request);
         //param or multipart xss 필터링
-        this.params.putAll(xssChangeMap(request.getParameterMap()));
+        //this.params.putAll(xssChangeMap(request.getParameterMap()));
+        this.params.putAll(request.getParameterMap());
 
         String charEncoding = request.getCharacterEncoding();
         this.encoding = StringUtils.isBlank(charEncoding) ? StandardCharsets.UTF_8 : Charset.forName(charEncoding);
@@ -62,7 +62,7 @@ public class RequestParameterWrapper extends HttpServletRequestWrapper {
             Object parse = jsonParser.parse(collect);
             if (parse instanceof JSONArray) {
                 JSONArray jsonArray = (JSONArray) jsonParser.parse(collect);
-                setParameter("jsonArray", jsonArray.toJSONString());
+                setParameter("requestBody", jsonArray.toJSONString());
             } else {
                 JSONObject jsonObject = (JSONObject) jsonParser.parse(collect);
                 Iterator<?> iterator = jsonObject.keySet().iterator();
@@ -72,7 +72,7 @@ public class RequestParameterWrapper extends HttpServletRequestWrapper {
                 }
             }
         } catch (Exception e) {
-            logger.error("RequestParameterLoggingWrapper init error", e);
+            log.error("RequestParameterLoggingWrapper init error", e);
         }
     }
 

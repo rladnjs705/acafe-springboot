@@ -31,8 +31,13 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpcore'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.mariadb.jdbc:mariadb-java-client'
-    implementation 'org.springframework:spring-core:6.0.4'
+    implementation 'org.hibernate:hibernate-validator:8.0.0.Final'
+    implementation 'org.modelmapper:modelmapper:3.1.1'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux';
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
+    compileOnly 'org.springframework:spring-aop'
+    compileOnly 'org.aspectj:aspectjweaver'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
