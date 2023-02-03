@@ -83,8 +83,8 @@ function request(method, url, params) {
 		type : method,
 		url : url,
 		data : params,
-		dataType : "json",
-		contentType: 'application/json',
+		dataType: 'json',
+		contentType: 'application/json; charset:UTF-8',
 	});
 	ajax.done(
 			function(data) {
@@ -298,6 +298,14 @@ function sweetError(msg)
 {
 	Swal.fire({
 		icon: 'error',
+		text: msg
+	})
+}
+
+function sweetSuccess(msg)
+{
+	Swal.fire({
+		icon: 'success',
 		text: msg
 	})
 }

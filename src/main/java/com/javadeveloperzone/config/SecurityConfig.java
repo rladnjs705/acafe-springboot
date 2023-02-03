@@ -34,7 +34,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    	http.authorizeHttpRequests().requestMatchers("/", "/user/join", "/user/signup", "/static/**", "/favicon.ico").permitAll()
+    	http.authorizeHttpRequests().requestMatchers("/","/user/loginPage", "/user/join", "/user/create", "/static/**", "/favicon.ico").permitAll()
 //        	.requestMatchers("/users/**", "/admin/**").hasAuthority(ProjectConstants.USER_ROLE)
 //            .requestMatchers("/**").permitAll()
                 .requestMatchers("/user/**").hasAuthority(ProjectConstants.USER_ROLE)
@@ -45,7 +45,7 @@ public class SecurityConfig {
             .loginPage("/user/loginPage")
             .loginProcessingUrl("/user/login")
                 .usernameParameter("userEmail").passwordParameter("password")
-            .defaultSuccessUrl("/user/success")
+            .defaultSuccessUrl("/menu/index")
             .failureHandler(authenticationFailureHandler())
             .successHandler(authenticationSuccessHandler())
             .permitAll()

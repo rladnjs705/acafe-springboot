@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="categoryFormModalFragment">
     <div class="modal add-cateegory-modal" id="add-cateegory-modal" data-bs-backdrop=true tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal_background"></div>
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,7 +12,7 @@
                 <div class="modal-body">
                     <h5 class="mb-3">카테고리 목록</h5>
 
-                    <ul class="category-list">
+                    <ul class="category-list" id="categoryList">
                         <li class="mb-3 d-flex justify-content-between">
                             <p>피자</p>
                             <div class="edit-box">
@@ -37,17 +38,12 @@
                             </div>
                         </li>
                     </ul>
-                    <!-- <div class="input-group">
-                      <input type="text" class="form-control border-line">
-                      <button class="btn btn-primary">등록</button>
-                    </div> -->
-
                 </div>
 
                 <div class="modal-footer d-flex flex-column align-items-stretch">
                     <div class="input-group">
-                        <input type="text" class="form-control border-line">
-                        <button class="btn btn-primary">등록</button>
+                        <input id="categoryName" name="categoryName" type="text" class="form-control border-line">
+                        <button class="btn btn-primary" type="button" onclick="createCategory();">등록</button>
                     </div>
                 </div>
             </div>

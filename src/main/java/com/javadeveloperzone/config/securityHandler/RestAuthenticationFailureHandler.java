@@ -8,47 +8,49 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 
 @Component
-public class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class RestAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(RestAuthenticationFailureHandler.class);
 
 	@Override
-	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse httpServletResponse,
+	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException ex) throws IOException, ServletException {
 
 		logger.debug("RestAuthenticationFailureHandler error : {}", ex);
-		
-		ResponseVo resp = null;
-		int status = 0;
-		if(ex instanceof UsernameNotFoundException) {
-			resp = new ResponseVo(ResultCodeType.ERROR_USER_NOT_FOUND);
-			status = ResultCodeType.ERROR_USER_NOT_FOUND.getStatus().value();
-		}
-		else if(ex instanceof BadCredentialsException) {
-			resp = new ResponseVo(ResultCodeType.ERROR_PWD_NOT_MATCH);
-			status = ResultCodeType.ERROR_PWD_NOT_MATCH.getStatus().value();
-		}
-		else {
-			resp = new ResponseVo(ResultCodeType.ERROR_USER_NOT_FOUND);
-			status = ResultCodeType.ERROR_USER_NOT_FOUND.getStatus().value();
+
+		String errorMessage = "";
+
+		if(ex instanceof BadCredentialsException) {
+			errorMessage = "아이디 또는 비밀번호가 맞지 않습니다. 다시 확인해주세요.";
+		} else if (ex instanceof InternalAuthenticationServiceException) {
+			errorMessage = "내부 시스템 문제로 로그인 요청을 처리할 수 없습니다. 관리자에게 문의하세요. ";
+		} else if (ex instanceof UsernameNotFoundException) {
+			errorMessage = "존재하지 않는 계정입니다. 회원가입 후 로그인해주세요.";
+		} else if (ex instanceof AuthenticationCredentialsNotFoundException) {
+			errorMessage = "인증 요청이 거부되었습니다. 관리자에게 문의하세요.";
+		} else {
+			errorMessage = "알 수 없는 오류로 로그인 요청을 처리할 수 없습니다. 관리자에게 문의하세요.";
 		}
 
-		httpServletResponse.setStatus(status);
-		OutputStream out = httpServletResponse.getOutputStream();
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.writerWithDefaultPrettyPrinter().writeValue(out, resp);
-		out.flush();
+		logger.error("loginFail errorMessage: " + errorMessage);
 
-		logger.error("loginfail resultCode: " + resp.getResultCode());
+		errorMessage = URLEncoder.encode(errorMessage, "UTF-8"); /* 한글 인코딩 깨진 문제 방지 */
+		setDefaultFailureUrl("/user/loginPage?error=true&exception="+errorMessage);
+		super.onAuthenticationFailure(request, response, ex);
+
 	}
 }

@@ -1,11 +1,11 @@
 package com.javadeveloperzone.model;
 
-public class ErrorObject {
+public class ErrorResult {
 
     private final String fieldName;
     private final String message;
 
-    public ErrorObject(String fieldName, String message) {
+    public ErrorResult(String fieldName, String message) {
         this.fieldName = fieldName;
         this.message = message;
     }

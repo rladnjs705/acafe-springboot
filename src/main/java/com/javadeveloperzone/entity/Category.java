@@ -2,6 +2,7 @@ package com.javadeveloperzone.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,4 +38,14 @@ public class Category {
 
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updatedDate = LocalDateTime.now();
+
+    @Builder
+    public Category (String categoryName, Long categoryId) {
+        this.id = categoryId;
+        this.categoryName = categoryName;
+    }
+
+    public void updateCategory(Category category) {
+        this.categoryName = category.getCategoryName();
+    }
 }

@@ -1,9 +1,12 @@
 spring:
+  messages:
+    encoding: UTF-8
   mvc:
     static-path-pattern: classpath:/static/**
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
+    encoding: UTF-8
   servlet:
     multipart:
       maxFileSize: 20MB
@@ -47,7 +50,7 @@ spring:
     database-platform: org.hibernate.dialect.MariaDBDialect
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         default_batch_fetch_size: 100

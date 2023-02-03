@@ -2,9 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/login_layout}">
 <head>
-  <script type="text/javascript">
+  <script th:inline="javascript">
+      const error = [[${error}]];
+      const exception = [[${exception}]];
     function initPage(){
-
+        if( error != null ) {
+            sweetError(exception);
+        }
     }
   </script>
 </head>

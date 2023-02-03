@@ -20,7 +20,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
 
 		return Optional
-				.ofNullable(userRepository.findByEmail(userEmail))
+				.ofNullable(userRepository.findByEmail(userEmail).get())
 				.orElseThrow(() -> new BadCredentialsException("이메일 주소를 확인해주세요."));
 	}
 }

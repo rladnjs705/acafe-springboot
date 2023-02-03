@@ -5,26 +5,167 @@
 <head>
     <script type="text/javascript">
         function initPage(){
+            categoryList();
+            $(".modal_background").click(function () {
+                closeCategoryForm()
+                closeMenu()
+            });
+        }
+
+        function categoryList() {
+            const params = {};
+            const request_url = "[[@{/admin/categories}]]";
+            const ajax = request("GET", request_url, params);
+            ajax.done(function(data) {
+                    if (data.data.list.length > 0) {
+                        let html ="";
+                        for(let i =0; i < data.data.list.length; i++){
+                            html += "<li class=\"mb-3 d-flex justify-content-between\">";
+                            html += "<p>"+data.data.list[i].categoryName+"</p>";
+                            html += "<div class=\"edit-box\">";
+                            html += "<a href=\"#\" class=\"link\" onclick=\"updateCategory(this,'"+data.data.list[i].categoryName+"','"+data.data.list[i].categoryId+"');\"><i class='bx bxs-pencil'></i></a>";
+                            html += "<a href=\"#\" class=\"link\" onclick=\"deleteCategory('"+data.data.list[i].categoryId+"');\"><i class='bx bxs-trash'></i></a>";
+                            html += "</div>";
+                            html += "</li>";
+                        }
+                        $("#categoryList").html(html);
+                    }else{
+                        $("#categoryList").html("<p class='text-center'>조회된 데이터가 없습니다.</p>");
+                    }
+                })
+                .fail(function(data){
+                    if(data && data.responseText){
+                        sweetError(data.responseJSON.resultMsg);
+                    }
+                })
+                .always(function(){}
+                );
+        }
+
+        function updateCategory(self,categoryName,categoryId) {
+            let li = $(self).closest("li");
+            let html = "<input type=\"text\" class=\"form-control border-line\" value=\""+categoryName+"\" onfocusout=\"updateEdit(this,'"+categoryId+"','"+categoryName+"')\">"
+            $(li).html(html);
         }
 
         function openCategoryForm() {
-            $("#add-cateegory-modal").fadeIn(300).delay(200)
+            $(".modal_background").fadeIn(300).delay(200);
+            $("#add-cateegory-modal").fadeIn(300).delay(200);
         }
 
         function closeCategoryForm() {
-            $("#add-cateegory-modal").fadeOut(300).delay(200)
+            $(".modal_background").fadeOut(300).delay(200);
+            $("#add-cateegory-modal").fadeOut(300).delay(200);
+            initCategoryModal();
         }
 
         function openMenu() {
-            $("#add-menu-modal").modal({
-                backdrop : true
-            })
+            $(".modal_background").fadeIn(300).delay(200);
             $("#add-menu-modal").fadeIn(300).delay(200);
         }
 
         function closeMenu() {
-            $("#add-menu-modal").fadeOut(300).delay(200)
+            $(".modal_background").fadeOut(300).delay(200);
+            $("#add-menu-modal").fadeOut(300).delay(200);
+            initMenuModal();
         }
+
+        function initCategoryModal() {
+            $("#categoryName").val("");
+        }
+
+        function initMenuModal() {
+
+        }
+
+        function createCategory() {
+            if(!$("#categoryName").val()){
+                sweetError("카테고리명을 입력해주세요.");
+                return;
+            }
+
+            const params = {
+                "categoryName" : $("#categoryName").val(),
+            };
+            const request_url = "[[@{/admin/category/create}]]";
+            const ajax = request("POST", request_url, JSON.stringify(params));
+            ajax.done(
+                function(data) {
+                    if(null != data && data.resultCode == 0){
+                        sweetSuccess("카테고리가 등록되었습니다.");
+                        $("#categoryName").val("");
+                        categoryList();
+                    }
+                })
+                .fail(function(data){
+                    if(data && data.responseText){
+                        sweetError(data.responseJSON.resultMsg);
+                    }
+                })
+                .always(function(){}
+                );
+        }
+
+        function updateEdit(tag,categoryId,categoryName) {
+            if(tag.value == categoryName){
+                let li = $(tag).closest("li");
+                let html = "";
+                html += "<p>"+categoryName+"</p>";
+                html += "<div class=\"edit-box\">";
+                html += "<a href=\"#\" class=\"link\" onclick=\"updateCategory(this,'"+categoryName+"','"+categoryId+"');\"><i class='bx bxs-pencil'></i></a>";
+                html += "<a href=\"#\" class=\"link\" onclick=\"deleteCategory('"+categoryId+"');\"><i class='bx bxs-trash'></i></a>";
+                html += "</div>";
+
+                $(li).html(html);
+                return;
+            }
+            if(!tag.value){
+                sweetError("카테고리명을 입력해주세요.");
+                return;
+            }
+
+            const params = {
+                "categoryId" : categoryId,
+                "categoryName" : tag.value,
+            };
+            const request_url = "[[@{/admin/category/update}]]";
+            const ajax = request("PUT", request_url, JSON.stringify(params));
+            ajax.done(
+                function(data) {
+                    if(null != data && data.resultCode == 0){
+                        categoryList();
+                    }
+                })
+                .fail(function(data){
+                    if(data && data.responseText){
+                        sweetError(data.responseJSON.resultMsg);
+                    }
+                })
+                .always(function(){}
+                );
+        }
+
+        function deleteCategory(categoryId) {
+            const params = {
+            };
+            const request_url = "/admin/category/delete/"+categoryId;
+            const ajax = request("DELETE", request_url, JSON.stringify(params));
+            ajax.done(
+                function(data) {
+                    if(null != data && data.resultCode == 0){
+                        // sweetSuccess("카테고리가 삭제되었습니다.");
+                        categoryList();
+                    }
+                })
+                .fail(function(data){
+                    if(data && data.responseText){
+                        sweetError(data.responseJSON.resultMsg);
+                    }
+                })
+                .always(function(){}
+                );
+        }
+
     </script>
 </head>
 
