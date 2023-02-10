@@ -26,8 +26,8 @@ public class CategoryRestController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/admin/categories")
-    public ResponseEntity<ResponseVo> categories(@RequestParam HashMap<String, Object> param) {
+    @GetMapping("/user/categories")
+    public ResponseEntity<ResponseVo> categories() {
         Map<String,Object> respMap = new HashMap<String, Object>();
 
         List<Category> categoryList = categoryService.getCategoryList();
@@ -47,12 +47,14 @@ public class CategoryRestController {
             log.info("errors={}", bindingResult);
             return ResponseUtils.response(ResultCodeType.ERROR_PARAM, bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
-
+        Map<String,Object> respMap = new HashMap<String, Object>();
         Category category = new Category();
         category = category.builder().
                 categoryName(categoryDto.getCategoryName())
                 .build();
         categoryService.createCategory(category);
+        CategoryDto dto = new CategoryDto(category);
+        respMap.put("result", dto);
 
         return ResponseUtils.response(ResultCodeType.SUCCESS, null);
     }
@@ -71,9 +73,8 @@ public class CategoryRestController {
                 .categoryId(categoryDto.getCategoryId())
                 .categoryName(categoryDto.getCategoryName())
                 .build();
-        Category data = categoryService.getCategory(category);
+        Category data = categoryService.getDuplicateCategory(category);
         data.updateCategory(category);
-
 
         return ResponseUtils.response(ResultCodeType.SUCCESS, null);
     }

@@ -2,12 +2,15 @@ package com.javadeveloperzone.config.securityHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javadeveloperzone.config.exception.ResultCodeType;
+import com.javadeveloperzone.config.utils.ResponseUtils;
 import com.javadeveloperzone.model.ResponseVo;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -20,9 +23,11 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
-public class RestAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(RestAuthenticationFailureHandler.class);
 
@@ -48,9 +53,16 @@ public class RestAuthenticationFailureHandler extends SimpleUrlAuthenticationFai
 
 		logger.error("loginFail errorMessage: " + errorMessage);
 
-		errorMessage = URLEncoder.encode(errorMessage, "UTF-8"); /* 한글 인코딩 깨진 문제 방지 */
-		setDefaultFailureUrl("/user/loginPage?error=true&exception="+errorMessage);
-		super.onAuthenticationFailure(request, response, ex);
+		ResponseVo resp = new ResponseVo();
+		response.setStatus(HttpStatus.UNAUTHORIZED.value());
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		OutputStream out = response.getOutputStream();
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, Object> error = new HashMap<>();
+		error.put("error", errorMessage);
+		resp.setData(error);
+		mapper.writerWithDefaultPrettyPrinter().writeValue(out, resp);
+		out.flush();
 
 	}
 }

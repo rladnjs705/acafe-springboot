@@ -16,11 +16,14 @@ public class UserDto {
     private String password;
     private Role role;
 
+    private String authToken;
+
     @Builder
-    public UserDto(Long id, String email, String password, Role role) {
+    public UserDto(Long id, String email, String password, Role role, String authToken) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.authToken = authToken;
     }
 }

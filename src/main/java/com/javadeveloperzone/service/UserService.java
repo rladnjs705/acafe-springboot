@@ -5,4 +5,5 @@ import com.javadeveloperzone.dto.UserFormDto;
 
 public interface UserService {
     UserDto createUser(UserFormDto userFormDto);
+    UserDto getUser(UserDto userDto);
 }

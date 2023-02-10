@@ -33,10 +33,21 @@ public class UserServiceImpl implements UserService {
 
         // 가입한 성공한 모든 유저는  "USER" 권한 부여
         Users user = userRepository.save(Users.builder()
-                .password(passwordEncoder.encode(userFormDto.getPassword()))
+                .password(passwordEncoder.encode(userFormDto.getPwd()))
                 .email(userFormDto.getEmail())
                 .role(Role.USER)
                 .build());
+        return UserDto.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .role(user.getRole())
+                .build();
+    }
+
+    @Override
+    public UserDto getUser(UserDto dto) {
+        Users user = userRepository.findByEmail(dto.getEmail()).get();
         return UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())

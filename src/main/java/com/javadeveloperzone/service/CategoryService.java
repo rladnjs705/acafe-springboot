@@ -10,8 +10,7 @@ import java.util.List;
 public interface CategoryService {
     Category createCategory(Category category);
     List<Category> getCategoryList();
-
     Category getCategory(Category category);
-
+    Category getDuplicateCategory(Category category);
     void deleteCategory(Long categoryId);
 }

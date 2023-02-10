@@ -13,6 +13,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,42 +35,33 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    	http.authorizeHttpRequests().requestMatchers("/","/user/loginPage", "/user/join", "/user/create", "/static/**", "/favicon.ico").permitAll()
-//        	.requestMatchers("/users/**", "/admin/**").hasAuthority(ProjectConstants.USER_ROLE)
-//            .requestMatchers("/**").permitAll()
-                .requestMatchers("/user/**").hasAuthority(ProjectConstants.USER_ROLE)
-                .requestMatchers("/admin/**").hasAuthority(ProjectConstants.ADMIN_ROLE)
+    	http.authorizeHttpRequests().requestMatchers("/","/user/**", "/admin/**", "/static/**", "/favicon.ico").permitAll()
+//            .requestMatchers("/user/**").hasAuthority(ProjectConstants.USER_ROLE)
+//            .requestMatchers("/admin/**").hasAuthority(ProjectConstants.ADMIN_ROLE)
             .anyRequest().authenticated()
             .and()
             .formLogin()
-            .loginPage("/user/loginPage")
             .loginProcessingUrl("/user/login")
                 .usernameParameter("userEmail").passwordParameter("password")
-            .defaultSuccessUrl("/menu/index")
+            //.defaultSuccessUrl("/menu/index")
             .failureHandler(authenticationFailureHandler())
             .successHandler(authenticationSuccessHandler())
             .permitAll()
             .and()
-            //.rememberMe().key("WmQeZeP5mOtGX5ZnCzVX4U469QgtrsOe")
-            //.and()
             .logout()
             .logoutUrl("/user/logout")
             .logoutSuccessHandler(logoutSuccessHandler())
             .invalidateHttpSession(true)
-            .deleteCookies("JSESSIONID")
             .and() // 403 예외처리 핸들링
             .exceptionHandling()
-            //.authenticationEntryPoint(authenticationHandler())
             .accessDeniedPage("/user/denied")
             .and()
             .csrf().disable();
-        
+
     	http.sessionManagement()
-        	.maximumSessions(1)
-        	.maxSessionsPreventsLogin(false)
-        	.expiredUrl("/");
-        
-//        http.headers().frameOptions().sameOrigin();
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.headers().frameOptions().sameOrigin();
 //        http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
