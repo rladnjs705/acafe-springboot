@@ -75,10 +75,13 @@ spring:
     database-platform: org.hibernate.dialect.MariaDBDialect
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         default_batch_fetch_size: 100
         format_sql: true
 jwt:
   secret-key: c88d74ba-1554-48a4-b549-b926f5d77c9e
+
+file:
+  dir: /var/uploads/
