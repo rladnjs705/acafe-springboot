@@ -1,5 +1,6 @@
 package com.javadeveloperzone.entity;
 
+import com.javadeveloperzone.dto.ItemDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -37,11 +36,18 @@ public class Item {
     private LocalDateTime updatedDate = LocalDateTime.now();
 
     @Builder
-    public Item (String itemName, Long itemId, Integer itemPrice, String itemImage, Category category) {
+    public Item(String itemName, Long itemId, Integer itemPrice, String itemImage, Category category) {
         this.id = itemId;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.itemImage = itemImage;
         this.category = category;
+    }
+
+    public void updateItem(Item item) {
+        this.itemName = item.getItemName();
+        this.itemPrice = item.getItemPrice();
+        this.itemImage = item.getItemImage();
+        this.category = item.getCategory();
     }
 }

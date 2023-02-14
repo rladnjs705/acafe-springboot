@@ -1,0 +1,58 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3307/acafe_test?useSSL=false
+    username: root
+    password: root
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+        format_sql: true
+  messages:
+    encoding: UTF-8
+  mvc:
+    static-path-pattern: classpath:/static/**
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    thymeleaf:
+      cache: false
+  servlet:
+    multipart:
+      maxFileSize: 20MB
+      maxRequestSize: 100MB
+  devtools:
+    livereload:
+      enabled: true
+server:
+  compression:
+    enabled: true
+  http2:
+    enabled: true
+  port: 8080
+  servlet:
+    context-path: /
+  error:
+    path: /error
+    whitelabel:
+      enabled: false
+  tomcat:
+    use-relative-redirects: true
+    remoteip:
+      remote-ip-header: x-forwarded-for
+      protocol-header: x-forwarded-proto
+  forward-headers-strategy : native
+logging:
+  config: classpath:logback-local.xml
+jwt:
+  secret-key: c88d74ba-1554-48a4-b549-b926f5d77c9e

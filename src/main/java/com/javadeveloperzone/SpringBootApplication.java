@@ -4,10 +4,13 @@ import com.javadeveloperzone.config.ProjectConstants;
 import com.javadeveloperzone.domain.Role;
 import com.javadeveloperzone.entity.Users;
 import com.javadeveloperzone.repository.UserRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @org.springframework.boot.autoconfigure.SpringBootApplication
@@ -31,5 +34,10 @@ public class SpringBootApplication {
                 .build();
 
         //userRepository.save(admin);
+    }
+
+    @Bean
+    JPAQueryFactory jpaQueryFactory(EntityManager em) {
+        return new JPAQueryFactory(em);
     }
 }

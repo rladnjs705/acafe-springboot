@@ -16,11 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,13 +35,13 @@ public class ItemRestController {
     private final CategoryService categoryService;
 
     @GetMapping("/user/items")
-    public ResponseEntity<ResponseVo> items(@PageableDefault(sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
+    public ResponseEntity<ResponseVo> items(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                                            ItemDto dto) {
         Map<String,Object> respMap = new HashMap<String, Object>();
 
-        Page<Item> pageList = itemService.getItemList(pageable);
-
-        List<ItemDto> itemDtoList = pageList.stream().map(ItemDto::new).collect(Collectors.toList());
-        Page<ItemDto> itemDtoPage = new PageImpl<>(itemDtoList, pageable, pageList.getTotalElements());
+        Page<Item> searchList = itemService.getItemList(dto, pageable);
+        List<ItemDto> itemDtoList = searchList.stream().map(ItemDto::new).collect(Collectors.toList());
+        Page<ItemDto> itemDtoPage = new PageImpl<>(itemDtoList, pageable, searchList.getTotalElements());
 
         respMap.put("list", itemDtoPage.toList());
         respMap.put("pageable", itemDtoPage.getPageable());
@@ -78,7 +77,47 @@ public class ItemRestController {
 
         ItemDto dto = new ItemDto(item);
 
-        respMap.put("result", dto);
+        respMap.put("item", dto);
+
+        return ResponseUtils.response(respMap);
+    }
+
+    @PutMapping("/admin/item/update")
+    @Transactional
+    public ResponseEntity<ResponseVo> updateItem(@Validated ItemDto itemDto, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()){
+            log.info("errors={}", bindingResult);
+            return ResponseUtils.response(ResultCodeType.ERROR_PARAM, bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
+        Map<String,Object> respMap = new HashMap<String, Object>();
+        Item item = new Item();
+        Category category = new Category();
+
+        category = category.builder()
+                .categoryId(itemDto.getCategoryId())
+                .build();
+        item = item.builder()
+                .itemId(itemDto.getItemId())
+                .itemName(itemDto.getItemName())
+                .itemPrice(itemDto.getItemPrice())
+                .itemImage(itemDto.getItemImage())
+                .category(category)
+                .build();
+
+        Item result = itemService.getItem(item);
+        result.updateItem(item);
+
+        ItemDto dto = new ItemDto(item);
+
+        respMap.put("item", dto);
+
+        return ResponseUtils.response(respMap);
+    }
+
+    @DeleteMapping("/admin/item/delete/{id}")
+    public ResponseEntity<ResponseVo> deleteItem(@PathVariable Long id) {
+        itemService.deleteItem(id);
 
         return ResponseUtils.response(ResultCodeType.SUCCESS, null);
     }
