@@ -50,7 +50,7 @@ public class MemberJpaRepository {
 //        }
         List<ItemDto> content = queryFactory
                 .select(new QItemDto(
-                        item.id.as("itemId"),
+                        item.itemId.as("itemId"),
                         item.itemName,
                         item.itemPrice,
                         item.itemImage,

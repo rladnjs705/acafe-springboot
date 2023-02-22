@@ -35,7 +35,7 @@ public class ItemRestController {
     private final CategoryService categoryService;
 
     @GetMapping("/user/items")
-    public ResponseEntity<ResponseVo> items(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+    public ResponseEntity<ResponseVo> items(@PageableDefault(sort = "itemId", direction = Sort.Direction.DESC) Pageable pageable,
                                             ItemDto dto) {
         Map<String,Object> respMap = new HashMap<String, Object>();
 

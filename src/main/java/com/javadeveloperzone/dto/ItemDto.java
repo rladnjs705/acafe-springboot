@@ -18,7 +18,7 @@ public class ItemDto {
     private String itemName;
 
     @PositiveOrZero(message = "메뉴가격을 제대로 입력해 주세요.") // 양수와0만 허용
-    private Integer itemPrice;
+    private Integer itemPrice = 0;
     //@NotBlank(message = "이미지를 선택해 주세요.")
     private String itemImage;
     //@NotNull(message = "카테고리를 선택해 주세요.")
@@ -28,7 +28,7 @@ public class ItemDto {
 
     @Builder
     public ItemDto(Item item) {
-        this.itemId = item.getId();
+        this.itemId = item.getItemId();
         this.itemName = item.getItemName();
         this.itemPrice = item.getItemPrice();
         this.itemImage = item.getItemImage();

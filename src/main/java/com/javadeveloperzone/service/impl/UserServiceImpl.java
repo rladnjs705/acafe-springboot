@@ -11,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,14 +49,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUser(UserDto dto) {
-        Users user = userRepository.findByEmail(dto.getEmail()).get();
-        return UserDto.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .role(user.getRole())
-                .build();
+    public Users getUser(UserDto dto) {
+        return userRepository.findByEmail(dto.getEmail()).get();
+    }
+
+    @Override
+    public Users getUserId(UserDto dto) {
+        return userRepository.findById(dto.getId()).get();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Users> getUserList() {
+        return userRepository.findAll();
     }
 
     private void validateDuplicateUsers(UserFormDto user){

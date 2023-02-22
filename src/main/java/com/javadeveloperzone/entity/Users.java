@@ -48,12 +48,16 @@ public class Users implements UserDetails
     private List<Order> orders = new ArrayList<>();
 
     @Builder
-    public Users(String password, String email, Role role, LocalDateTime createDate, LocalDateTime updatedDate) {
+    public Users(Long id, String password, String email, Role role, LocalDateTime createDate, LocalDateTime updatedDate) {
         this.password = password;
         this.email = email;
         this.role = role;
         this.createDate = createDate;
         this.updatedDate = updatedDate;
+    }
+
+    public void updateRole(Role role){
+        this.role = role;
     }
 
     @Override

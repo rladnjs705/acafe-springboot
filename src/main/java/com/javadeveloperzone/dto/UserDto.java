@@ -26,4 +26,11 @@ public class UserDto {
         this.role = role;
         this.authToken = authToken;
     }
+
+    @Builder
+    public UserDto(Long id, String email, Role role) {
+        this.id = id;
+        this.email = email;
+        this.role = role;
+    }
 }
