@@ -1,54 +1,99 @@
 package com.javadeveloperzone.controller.rest;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.javadeveloperzone.config.exception.ResultCodeType;
 import com.javadeveloperzone.config.utils.ResponseUtils;
+import com.javadeveloperzone.dto.ItemDto;
 import com.javadeveloperzone.dto.OrderDto;
+import com.javadeveloperzone.dto.OrderStreamDto;
 import com.javadeveloperzone.dto.UserDto;
 import com.javadeveloperzone.entity.Item;
 import com.javadeveloperzone.entity.Order;
 import com.javadeveloperzone.entity.OrderItem;
 import com.javadeveloperzone.entity.Users;
 import com.javadeveloperzone.model.ResponseVo;
+import com.javadeveloperzone.repository.OrderRepository;
 import com.javadeveloperzone.service.ItemService;
 import com.javadeveloperzone.service.OrderService;
 import com.javadeveloperzone.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.http.HttpRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import reactor.core.CoreSubscriber;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
 @RestController
 public class OrderRestController {
+    private final OrderRepository orderRepository;
 
     private final OrderService orderService;
     private final UserService userService;
     private final ItemService itemService;
 
-    @GetMapping("/admin/orders")
-    public ResponseEntity<ResponseVo> orders() {
-        Map<String,Object> respMap = new HashMap<String, Object>();
-        List<Order> result = orderService.getOrderList();
+    @GetMapping(value = "/admin/orders/subscribe")
+    public Mono<List<OrderStreamDto>> orderSubscribe() {
+        // 5초 간격으로 새로운 주문 목록을 조회하며 반환
+        return Flux.interval(Duration.ofSeconds(0))
+                .flatMap(interval -> Flux.fromIterable(orderService.getOrderList()))
+                .map(order -> {
+                    // Order 정보 추출
+                    Long orderId = order.getId();
+                    Boolean orderState = false;
+                    if (order.getStatus().getValue().equals("Y")) {
+                        orderState = false;
+                    } else {
+                        orderState = true;
+                    }
+                    Integer orderNumber = order.getOrderNumber();
+                    Integer orderCount = order.getOrderCount();
+                    Integer orderPriceSum = order.getOrderPriceSum();
+                    LocalDateTime createDate = order.getCreateDate();
 
-        respMap.put("list", result);
+                    // OrderItem 정보 추출
+                    List<OrderItem> orderItems = order.getOrderItems();
+                    List<ItemDto> itemDtoList = new ArrayList<>();
+                    for (OrderItem orderItem : orderItems) {
+                        ItemDto item = new ItemDto();
+                        item.setItemName(orderItem.getItem().getItemName());
+                        item.setItemPrice(orderItem.getItem().getItemPrice());
+                        item.setItemCount(orderItem.getItemCount());
+                        item.setItemPriceSum(orderItem.getItemPriceSum());
+                        itemDtoList.add(item);
+                    }
 
-        return ResponseUtils.response(respMap);
+                    // OrderStreamDto 객체 생성 및 매핑
+                    OrderStreamDto orderStreamDto = OrderStreamDto.builder()
+                            .orderId(orderId)
+                            .orderState(orderState)
+                            .orderPriceSum(orderPriceSum)
+                            .orderCount(orderCount)
+                            .createDate(createDate)
+                            .item(itemDtoList)
+                            .orderNumber(orderNumber)
+                            .build();
+                    return orderStreamDto;
+                })
+                .distinct()
+                .bufferTimeout(50, Duration.ofSeconds(1)) // 최대 50개의 데이터를 1초 동안 버퍼링
+                .next(); // 버퍼링된 데이터를 Mono로 변환하여 반환
     }
 
     @PostMapping("/user/order/create")
@@ -75,6 +120,8 @@ public class OrderRestController {
             user = userService.getUserId(userDto);
         }
 
+        List<OrderItem> orderItemList = new ArrayList<>();
+
         for (int i = 0; i < orderItems.size() ; i++) {
             JSONObject orderItemDto = (JSONObject) orderItems.get(i);
 
@@ -92,16 +139,24 @@ public class OrderRestController {
             if(orderDto.getUserId() == null || orderDto.getUserId() == 0){
                 user = Users.builder().id(0L).build();
             }
-            Order order = Order.createOrder(user, orderItem);
-            orderService.createOrder(order);
+
+            orderItemList.add(orderItem);
         }
+
+        //날짜가 변경되면 주문번호 초기화
+        Integer count =  orderRepository.countByOrderDate(LocalDate.now());
+        Integer orderNumber = (count > 0) ? count + 1 : 1;
+
+        Order order = Order.createOrder(user, orderNumber, orderDto.getOrderPriceSum(), orderDto.getOrderCount(), orderItemList);
+        orderService.createOrder(order);
 
         respMap.put("order", orderDto);
 
         return ResponseUtils.response(respMap);
     }
 
-    @PostMapping("/user/order/check")
+    @PostMapping("/admin/order/check")
+    @Transactional
     public ResponseEntity<ResponseVo> checkOrder(@RequestParam Boolean orderState, @RequestParam Long orderId) {
         Map<String,Object> respMap = new HashMap<String, Object>();
 

@@ -31,6 +31,7 @@ server:
     remoteip:
       remote-ip-header: x-forwarded-for
       protocol-header: x-forwarded-proto
+    connection-timeout: 60000
   forward-headers-strategy : native
 
 --- #local
@@ -75,7 +76,7 @@ spring:
     database-platform: org.hibernate.dialect.MariaDBDialect
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         default_batch_fetch_size: 100

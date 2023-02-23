@@ -26,6 +26,9 @@ public class ItemDto {
     private Long categoryId;
     private Long itemId;
 
+    private Integer itemPriceSum;
+    private Integer itemCount;
+
     @Builder
     public ItemDto(Item item) {
         this.itemId = item.getItemId();

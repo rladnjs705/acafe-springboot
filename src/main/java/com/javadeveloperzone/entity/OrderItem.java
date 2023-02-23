@@ -23,11 +23,11 @@ public class OrderItem {
     @JoinColumn(name="order_id")
     private Order order;
 
-    private int itemPrice; //주문 가격
-    private int itemPriceSum; //주문 총 가격
-    private int itemCount; //주문 수량
+    private Integer itemPrice; //주문 가격
+    private Integer itemPriceSum; //주문 총 가격
+    private Integer itemCount; //주문 수량
 
-    public static OrderItem createOrderItem(Item item, int itemPrice, int itemPriceSum, int itemCount) {
+    public static OrderItem createOrderItem(Item item, Integer itemPrice, Integer itemPriceSum, Integer itemCount) {
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
         orderItem.setItemPrice(itemPrice);

@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +30,23 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    private Integer orderNumber;
+
+    private Integer orderPriceSum;
+
+    private Integer orderCount;
 
     @CreationTimestamp // INSERT 쿼리 시 현재 시간으로 생성
     private LocalDateTime createDate= LocalDateTime.now();
 
     @UpdateTimestamp // UPDATE 시 자동으로 값을 채워줌
     private LocalDateTime updatedDate = LocalDateTime.now();
+
+    @CreatedDate
+    private LocalDate orderDate = LocalDate.now();
 
 
     //==연관관계 메서드==//
@@ -49,7 +61,7 @@ public class Order {
     }
 
     //==생성 메서드==//
-    public static Order createOrder(Users users, OrderItem... orderItems){
+    public static Order createOrder(Users users, Integer orderNumber, Integer orderPriceSum, Integer orderCount, List<OrderItem> orderItems){
         Order order = new Order();
         order.setUsers(users);
         for(OrderItem orderItem : orderItems) {
@@ -57,6 +69,9 @@ public class Order {
         }
         order.setStatus(OrderStatus.ORDER);
         order.setCreateDate(LocalDateTime.now());
+        order.setOrderNumber(orderNumber);
+        order.setOrderPriceSum(orderPriceSum);
+        order.setOrderCount(orderCount);
         return order;
     }
 

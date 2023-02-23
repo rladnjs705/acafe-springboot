@@ -29,10 +29,10 @@ public class OrderDto {
 
     @NotNull(message = "잘못된 주문 수입니다")
     @Positive // 양수만 허용
-    private Long orderCount;
+    private Integer orderCount;
 
     @Builder
-    public OrderDto(Long orderId, boolean orderState, Integer orderPriceSum, Long orderCount) {
+    public OrderDto(Long orderId, boolean orderState, Integer orderPriceSum, Integer orderCount) {
         this.orderPriceSum = orderPriceSum;
         this.orderCount = orderCount;
         this.orderId = orderId;

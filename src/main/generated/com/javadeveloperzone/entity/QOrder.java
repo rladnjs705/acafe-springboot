@@ -26,7 +26,15 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final NumberPath<Integer> orderCount = createNumber("orderCount", Integer.class);
+
+    public final DatePath<java.time.LocalDate> orderDate = createDate("orderDate", java.time.LocalDate.class);
+
     public final ListPath<OrderItem, QOrderItem> orderItems = this.<OrderItem, QOrderItem>createList("orderItems", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
+
+    public final NumberPath<Integer> orderNumber = createNumber("orderNumber", Integer.class);
+
+    public final NumberPath<Integer> orderPriceSum = createNumber("orderPriceSum", Integer.class);
 
     public final EnumPath<OrderStatus> status = createEnum("status", OrderStatus.class);
 
