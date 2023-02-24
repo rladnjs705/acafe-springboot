@@ -43,7 +43,6 @@ import java.util.stream.Collectors;
 @RestController
 public class OrderRestController {
     private final OrderRepository orderRepository;
-
     private final OrderService orderService;
     private final UserService userService;
     private final ItemService itemService;
@@ -149,6 +148,8 @@ public class OrderRestController {
 
         Order order = Order.createOrder(user, orderNumber, orderDto.getOrderPriceSum(), orderDto.getOrderCount(), orderItemList);
         orderService.createOrder(order);
+
+        orderDto.setOrderNumber(orderNumber);
 
         respMap.put("order", orderDto);
 

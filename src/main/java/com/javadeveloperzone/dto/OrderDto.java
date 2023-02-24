@@ -31,11 +31,13 @@ public class OrderDto {
     @Positive // 양수만 허용
     private Integer orderCount;
 
+    private Integer orderNumber;
     @Builder
-    public OrderDto(Long orderId, boolean orderState, Integer orderPriceSum, Integer orderCount) {
+    public OrderDto(Long orderId, boolean orderState, Integer orderPriceSum, Integer orderCount, Integer orderNumber) {
         this.orderPriceSum = orderPriceSum;
         this.orderCount = orderCount;
         this.orderId = orderId;
         this.orderState = orderState;
+        this.orderNumber = orderNumber;
     }
 }

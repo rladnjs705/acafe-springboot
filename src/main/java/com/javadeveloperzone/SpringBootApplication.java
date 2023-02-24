@@ -33,7 +33,7 @@ public class SpringBootApplication {
                 .role(Role.ADMIN)
                 .build();
 
-        userRepository.save(admin);
+        //userRepository.save(admin);
     }
 
     @Bean
