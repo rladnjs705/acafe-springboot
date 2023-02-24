@@ -26,6 +26,10 @@ public class QUsers extends EntityPathBase<Users> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath name = createString("name");
+
+    public final StringPath nickName = createString("nickName");
+
     public final ListPath<Order, QOrder> orders = this.<Order, QOrder>createList("orders", Order.class, QOrder.class, PathInits.DIRECT2);
 
     public final StringPath password = createString("password");

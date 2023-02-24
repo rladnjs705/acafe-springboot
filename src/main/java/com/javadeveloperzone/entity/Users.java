@@ -35,6 +35,12 @@ public class Users implements UserDetails
     private String email;
 
     @Column
+    private String name;
+
+    @Column
+    private String nickName;
+
+    @Column
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -48,10 +54,13 @@ public class Users implements UserDetails
     private List<Order> orders = new ArrayList<>();
 
     @Builder
-    public Users(Long id, String password, String email, Role role, LocalDateTime createDate, LocalDateTime updatedDate) {
+    public Users(Long id, String password, String email, Role role, LocalDateTime createDate, LocalDateTime updatedDate, String name, String nickName) {
+        this.id = id;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.name = name;
+        this.nickName = nickName;
         this.createDate = createDate;
         this.updatedDate = updatedDate;
     }

@@ -62,11 +62,12 @@ public class UserRestController {
                 .email(email)
                 .build();
         Users user = userService.getUser(dto);
-        UserDto result = UserDto.builder().email(user.getEmail()).role(user.getRole()).id(user.getId()).build();
-
-        respMap.put("email", result.getEmail());
-        respMap.put("role", result.getRole());
-        respMap.put("id", result.getId());
+        UserDto result = UserDto.builder()
+                .email(user.getEmail())
+                .role(user.getRole())
+                .id(user.getId())
+                .build();
+        respMap.put("user", result);
 
         return ResponseUtils.response(respMap);
     }

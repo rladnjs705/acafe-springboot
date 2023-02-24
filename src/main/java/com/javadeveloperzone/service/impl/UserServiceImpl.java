@@ -26,25 +26,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserFormDto userFormDto) {
-
-        // 이메일 중복 확인
-//        if(userRepository.findByEmail(userFormDto.getEmail()) != null){
-//            return null;
-//        }
         //이메일 중복 확인
         validateDuplicateUsers(userFormDto);
+
+        //닉네임 중복 확인
+        validateNickNameUsers(userFormDto);
 
         // 가입한 성공한 모든 유저는  "USER" 권한 부여
         Users user = userRepository.save(Users.builder()
                 .password(passwordEncoder.encode(userFormDto.getPwd()))
                 .email(userFormDto.getEmail())
                 .role(Role.USER)
+                .name(userFormDto.getUserName())
+                .nickName(userFormDto.getNickName())
                 .build());
         return UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .password(user.getPassword())
                 .role(user.getRole())
+                .userName(user.getName())
+                .nickName(user.getNickName())
                 .build();
     }
 
@@ -67,6 +69,12 @@ public class UserServiceImpl implements UserService {
     private void validateDuplicateUsers(UserFormDto user){
         userRepository.findByEmail(user.getEmail()).ifPresent((m -> {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
+        }));
+    }
+
+    private void validateNickNameUsers(UserFormDto user){
+        userRepository.findByNickName(user.getNickName()).ifPresent((m -> {
+            throw new IllegalStateException("이미 존재하는 닉네임입니다.");
         }));
     }
 }
