@@ -66,6 +66,8 @@ public class UserRestController {
                 .email(user.getEmail())
                 .role(user.getRole())
                 .id(user.getId())
+                .userName(user.getName())
+                .nickName(user.getNickName())
                 .build();
         respMap.put("user", result);
 
