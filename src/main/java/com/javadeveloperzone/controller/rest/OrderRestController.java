@@ -49,8 +49,8 @@ public class OrderRestController {
 
     @GetMapping(value = "/admin/orders/subscribe")
     public Mono<List<OrderStreamDto>> orderSubscribe() {
-        // 1초 간격으로 새로운 주문 목록을 조회하며 반환
-        return Flux.interval(Duration.ofSeconds(1))
+        // 2초 간격으로 새로운 주문 목록을 조회하며 반환
+        return Flux.interval(Duration.ofSeconds(2))
                 .flatMap(interval -> Flux.fromIterable(orderService.getOrderList()))
                 .map(order -> {
                     // Order 정보 추출
@@ -91,7 +91,7 @@ public class OrderRestController {
                     return orderStreamDto;
                 })
                 .distinct()
-                .bufferTimeout(50, Duration.ofSeconds(1)) // 최대 50개의 데이터를 2초 동안 버퍼링
+                .bufferTimeout(50, Duration.ofSeconds(1)) // 최대 50개의 데이터를 1초 동안 버퍼링
                 .next(); // 버퍼링된 데이터를 Mono로 변환하여 반환
     }
 
