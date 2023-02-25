@@ -34,6 +34,8 @@ public class QItem extends EntityPathBase<Item> {
 
     public final NumberPath<Integer> itemPrice = createNumber("itemPrice", Integer.class);
 
+    public final ListPath<OrderItem, QOrderItem> orderItems = this.<OrderItem, QOrderItem>createList("orderItems", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
+
     public final DateTimePath<java.time.LocalDateTime> updatedDate = createDateTime("updatedDate", java.time.LocalDateTime.class);
 
     public QItem(String variable) {

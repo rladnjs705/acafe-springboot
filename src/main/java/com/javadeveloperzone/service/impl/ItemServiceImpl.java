@@ -20,6 +20,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemJpaRepository itemJpaRepository;
 
     @Override
+    @Transactional
     public Item createItem(Item item) {
 
         Item result = itemRepository.save(item);
@@ -35,8 +36,9 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public void deleteItem(Long itemId) {
-        itemRepository.deleteById(itemId);
+        itemRepository.deleteByItemIdEquals(itemId);
     }
 
     @Override
