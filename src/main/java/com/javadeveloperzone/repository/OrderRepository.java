@@ -20,7 +20,7 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Integer countByOrderDate(LocalDate orderDate);
 
-    @EntityGraph(value = "Order.withUserAndOrderItems",attributePaths = {"users", "orderItems", "orderItems.order", "orderItems.item"})
+    @EntityGraph(value = "Order.withUserAndOrderItems",attributePaths = {"orderItems", "orderItems.order", "orderItems.item"})
     @Query("SELECT o FROM Order o WHERE o.status = 'ORDER'")
     List<Order> findAllWithUserAndOrderItems();
 }

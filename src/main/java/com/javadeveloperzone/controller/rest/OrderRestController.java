@@ -94,6 +94,54 @@ public class OrderRestController {
                 .bufferTimeout(50, Duration.ofSeconds(1)) // 최대 50개의 데이터를 1초 동안 버퍼링
                 .next(); // 버퍼링된 데이터를 Mono로 변환하여 반환
     }
+    @GetMapping("/admin/orders/stream")
+    public ResponseEntity<ResponseVo> ordersStream() {
+        Map<String,Object> respMap = new HashMap<String, Object>();
+        List<Order> orderList = orderService.getOrderList();
+        List<OrderStreamDto> orderStreamDtoList = new ArrayList<>();
+        for (Order order : orderList) {
+            // Order 정보 추출
+            Long orderId = order.getId();
+            Boolean orderState = false;
+            if(order.getStatus().getValue().equals("Y")){
+                orderState = false;
+            } else{
+                orderState = true;
+            }
+            Integer orderNumber = order.getOrderNumber();
+            Integer orderCount = order.getOrderCount();
+            Integer orderPriceSum = order.getOrderPriceSum();
+            LocalDateTime createDate = order.getCreateDate();
+
+            // OrderItem 정보 추출
+            List<OrderItem> orderItems = order.getOrderItems();
+            List<ItemDto> itemDtoList = new ArrayList<>();
+            for (OrderItem orderItem : orderItems) {
+                ItemDto item = new ItemDto();
+                item.setItemName(orderItem.getItem().getItemName());
+                item.setItemPrice(orderItem.getItem().getItemPrice());
+                item.setItemCount(orderItem.getItemCount());
+                item.setItemPriceSum(orderItem.getItemPriceSum());
+                itemDtoList.add(item);
+            }
+            // OrderStreamDto 객체 생성 및 매핑
+            OrderStreamDto orderStreamDto = OrderStreamDto.builder()
+                    .orderId(orderId)
+                    .orderState(orderState)
+                    .orderPriceSum(orderPriceSum)
+                    .orderCount(orderCount)
+                    .createDate(createDate)
+                    .item(itemDtoList)
+                    .orderNumber(orderNumber)
+                    .build();
+
+            orderStreamDtoList.add(orderStreamDto);
+        }
+
+        respMap.put("list", orderStreamDtoList);
+
+        return ResponseUtils.response(respMap);
+    }
 
     @PostMapping("/user/order/create")
     public ResponseEntity<ResponseVo> createOrder(@Validated OrderDto orderDto, @RequestBody String body, BindingResult bindingResult) throws ParseException {
