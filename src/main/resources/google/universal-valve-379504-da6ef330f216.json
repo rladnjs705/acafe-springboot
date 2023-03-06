@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "universal-valve-379504",
+  "private_key_id": "da6ef330f2163a80afe95e0faceeeb6d63e81c81",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDvjdDRNaDPOBz0\nckyGCDZZmSohdQP9DLZq8njqGhhZohq+4Lm8kWNqvBBYwsY2gPf3W8khY/R0sUfe\nLGZyFXEOmuYybl+fjIrdH3P4hi9QNobew11gfr2PBXu5VAgw5JxfohcWdRLJLNbp\n/HoHc9ntpusEzmptpc76MdiOYE3u27oX1A3Z1/CyLUjIR6lYbsfSNmZMFY30JOk1\naGME8sJRjtbhvPSX1WUlufe2a1345dBO3uBqaF4ehvS6jmIFmB63P/6Ru+vQRIw/\nXO9hwHtqHvVdAkrBE5jaD29mQwXwxxJoNfc8xDdpZRf43fc3HYikweWEkVLyO5qJ\n7FntPfZvAgMBAAECggEAB/x+0NAP//UAuwH/KxxQT/4pckz9SJtQVgP73OBauiJE\nfnF7+J1nWGzwM+jm4QMvQSNwASej7rjk/HpQPkD8TNBZpvvf6ZOSW9BrS5TmiZKA\nsCHd6xROnYYIYs46Yliuj7NrP9nAOiL4HJhzjl3Tua+uBiPirAGVyj3/Lc4vPLrX\n1upiFT4rwbHpSR+GGDg7dGYBc5TmknJG/mSpTHu8fTadUrS51ZA4cG6Fv6YozBFO\nuc3ZkXW1HaJl77ZG8LCJQAe7IIGmDYE+9Q9ayNU106KymocWUV4KLspapoRjZCib\nhoq0lkQfba/rvUhzR7A4jWeHn0HZjnsFyRKDRRwvgQKBgQD9k7LCqgfC24TtSYwJ\nDrWmLGXVeLFeQtxPp+WpcUqbxf+A2l5ktMaQFbfyDOqPDi20aCru+1RPBNunpcde\ngLKB9r5zrpmtlejrl6yHoFTbOI/miyUUaicC3l0tqESCq73S5Ryey7iYYLk9DPy/\nCrIhpEj9CezpqfGjvvliIAhlWwKBgQDx19B17pXyR9RFlJ0ZBw4aizCH/s56pxTg\ngRrsedzXLQt/bgd7TzyvE1uzLnYHUDoSrxJS/7kYSl0v4VrAdrCUxS6U9kItdHOU\nda/MckRqCnD05i75kSduXHDJPjYCX1WFzwXrYxw+K73qCczyyyZtUh21e9Le7s77\n7+MmMUG7fQKBgD7ILMApnNZPx2+AgB1V+P91ipj50uBFqYpHRYNYO2Kp+QKMDkbc\nwzS1S9+v9vsIRaSfDdIxg8Q0rbWqQ9xP/OJUlv7JQd9KeGqsGNlThu7n6CjqVnnh\ndlstduBxAtVfdBYdB6MBSWjgubw11PXvzf6qUC/mHzQTEXK7O79hsvJ1AoGAffXf\n12y6oIQU5WCwKhbom56fWlW2iV94mi3kLgKSqWgGswpFz03H15AHlN3AD7MTbCPP\nMXeLmkExI/0F3XR0KChDSMayVSZwBIT/WUayp2Bk0MkK8mVN2kc/XzGNw9KPoq/e\n72ihjygNNFaCbnqsuwen/ZxOilpraADbmErTZ6kCgYB+RLEEnxD75cbur3RxX7hi\n1n+/uK+ANjz6OnNwRcntIWo1GXcODS2yK3WkOoRl9vNCx59I3Ibn8txIOZncp1A7\nHeV44Qu6CBSbTPw6DdoOTnZ7TYD5jtey6lIhwhwbezxL9pOVFsIauOWp3J1La/+4\nx/WhX+5LmCxf9/2R0PioVQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "sungbok@universal-valve-379504.iam.gserviceaccount.com",
+  "client_id": "104781534725813401889",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sungbok%40universal-valve-379504.iam.gserviceaccount.com"
+}

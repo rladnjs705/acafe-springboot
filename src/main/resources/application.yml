@@ -86,3 +86,6 @@ jwt:
 
 file:
   dir: /var/uploads/
+gcp:
+  storage:
+    bucket-name: sungbok
