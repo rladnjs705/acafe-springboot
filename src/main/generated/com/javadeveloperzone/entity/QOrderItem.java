@@ -22,6 +22,8 @@ public class QOrderItem extends EntityPathBase<OrderItem> {
 
     public static final QOrderItem orderItem = new QOrderItem("orderItem");
 
+    public final StringPath coffeeType = createString("coffeeType");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final QItem item;

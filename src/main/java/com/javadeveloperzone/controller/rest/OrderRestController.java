@@ -78,6 +78,7 @@ public class OrderRestController {
                         item.setItemPriceSum(orderItem.getItemPriceSum());
                         item.setShot(orderItem.getShot());
                         item.setLight(orderItem.getLight());
+                        item.setCoffeeType(orderItem.getCoffeeType());
 
                         itemDtoList.add(item);
                     }
@@ -128,6 +129,7 @@ public class OrderRestController {
                 item.setItemPriceSum(orderItem.getItemPriceSum());
                 item.setShot(orderItem.getShot());
                 item.setLight(orderItem.getLight());
+                item.setCoffeeType(orderItem.getCoffeeType());
 
                 itemDtoList.add(item);
             }
@@ -193,13 +195,19 @@ public class OrderRestController {
                 light = orderItemDto.get("light").toString();
             }
 
+            String coffeeType = "";
+            if(orderItemDto.get("coffeeType") != null){
+                coffeeType = orderItemDto.get("coffeeType").toString();
+            }
+
             //주문 상품 생성
             OrderItem orderItem = OrderItem.createOrderItem(getItem,
                     Integer.parseInt(orderItemDto.get("itemPrice").toString()),
                     Integer.parseInt(orderItemDto.get("itemPriceSum").toString()),
                     Integer.parseInt(orderItemDto.get("itemCount").toString()),
                     shot,
-                    light);
+                    light,
+                    coffeeType);
 
             //주문 저장
             if(orderDto.getUserId() == null || orderDto.getUserId() == 0){
