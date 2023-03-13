@@ -18,13 +18,15 @@ public class OrderStreamDto {
     private Integer orderNumber;
     private Integer shot;
     private String light;
+
+    private String coffeeType;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createDate;
 
     private List<ItemDto> item;
 
     @Builder
-    public OrderStreamDto(Long orderId, Boolean orderState, Integer orderPriceSum, Integer orderCount, LocalDateTime createDate, List<ItemDto> item, Integer orderNumber, Integer shot, String light) {
+    public OrderStreamDto(Long orderId, Boolean orderState, Integer orderPriceSum, Integer orderCount, LocalDateTime createDate, List<ItemDto> item, Integer orderNumber, Integer shot, String light, String coffeeType) {
         this.orderPriceSum = orderPriceSum;
         this.orderCount = orderCount;
         this.orderId = orderId;
@@ -34,5 +36,6 @@ public class OrderStreamDto {
         this.orderNumber = orderNumber;
         this.shot = shot;
         this.light = light;
+        this.coffeeType = coffeeType;
     }
 }
