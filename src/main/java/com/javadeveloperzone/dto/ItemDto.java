@@ -28,7 +28,9 @@ public class ItemDto {
     private String displayYn = "Y";
     private Integer itemPriceSum;
     private Integer itemCount;
-    private String adminYn = "Y";
+    private String adminYn = "N";
+
+    private Integer itemOrder;
 
     @Builder
     public ItemDto(Item item) {
@@ -37,15 +39,17 @@ public class ItemDto {
         this.itemPrice = item.getItemPrice();
         this.itemImage = item.getItemImage();
         this.displayYn = item.getDisplayYn();
+        this.itemOrder = item.getItemOrder();
         this.categoryId = item.getCategory().getId();
     }
     @QueryProjection
-    public ItemDto(Long itemId, String itemName, Integer itemPrice, String itemImage, String displayYn, Long categoryId){
+    public ItemDto(Long itemId, String itemName, Integer itemPrice, String itemImage, String displayYn, Integer itemOrder, Long categoryId){
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.itemImage = itemImage;
         this.displayYn = displayYn;
         this.categoryId = categoryId;
+        this.itemOrder = itemOrder;
     }
 }

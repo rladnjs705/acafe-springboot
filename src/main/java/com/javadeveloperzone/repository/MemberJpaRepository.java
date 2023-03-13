@@ -38,6 +38,7 @@ public class MemberJpaRepository {
                         item.itemPrice,
                         item.itemImage,
                         item.displayYn,
+                        item.itemOrder,
                         category.id.as("categoryId")))
                 .from(item)
                 .leftJoin(item.category, category)

@@ -35,7 +35,7 @@ public class ItemRestController {
     private final CategoryService categoryService;
 
     @GetMapping("/user/items")
-    public ResponseEntity<ResponseVo> items(@PageableDefault(sort = "itemId", direction = Sort.Direction.DESC) Pageable pageable,
+    public ResponseEntity<ResponseVo> items(@PageableDefault(sort = {"itemOrder", "itemId"}, direction = Sort.Direction.DESC) Pageable pageable,
                                             ItemDto dto) {
         Map<String,Object> respMap = new HashMap<String, Object>();
 
@@ -71,6 +71,7 @@ public class ItemRestController {
                 .itemPrice(itemDto.getItemPrice())
                 .itemImage(itemDto.getItemImage())
                 .displayYn(itemDto.getDisplayYn())
+                .itemOrder(itemDto.getItemOrder())
                 .category(category)
                 .build();
 
@@ -104,6 +105,7 @@ public class ItemRestController {
                 .itemPrice(itemDto.getItemPrice())
                 .itemImage(itemDto.getItemImage())
                 .displayYn(itemDto.getDisplayYn())
+                .itemOrder(itemDto.getItemOrder())
                 .category(category)
                 .build();
 

@@ -28,6 +28,9 @@ public class Item {
     private Integer itemPrice;
     private String itemImage;
 
+    @Column
+    private Integer itemOrder = 0;
+
     @Column(columnDefinition = "CHAR(1) DEFAULT 'Y' CHECK (display_yn IN ('Y', 'N'))")
     private String displayYn;
 
@@ -45,12 +48,13 @@ public class Item {
     private LocalDateTime updatedDate = LocalDateTime.now();
 
     @Builder
-    public Item(String itemName, Long itemId, Integer itemPrice, String itemImage, String displayYn, Category category) {
+    public Item(String itemName, Long itemId, Integer itemPrice, String itemImage, String displayYn, Integer itemOrder, Category category) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.itemImage = itemImage;
         this.displayYn = displayYn;
+        this.itemOrder = itemOrder;
         this.category = category;
     }
 
@@ -59,6 +63,7 @@ public class Item {
         this.itemPrice = item.getItemPrice();
         this.itemImage = item.getItemImage();
         this.displayYn = item.getDisplayYn();
+        this.itemOrder = item.getItemOrder();
         this.category = item.getCategory();
     }
 }
