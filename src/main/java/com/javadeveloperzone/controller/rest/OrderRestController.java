@@ -66,6 +66,7 @@ public class OrderRestController {
                     Integer orderPriceSum = order.getOrderPriceSum();
                     LocalDateTime createDate = order.getCreateDate();
 
+
                     // OrderItem 정보 추출
                     List<OrderItem> orderItems = order.getOrderItems();
                     List<ItemDto> itemDtoList = new ArrayList<>();
@@ -75,6 +76,9 @@ public class OrderRestController {
                         item.setItemPrice(orderItem.getItem().getItemPrice());
                         item.setItemCount(orderItem.getItemCount());
                         item.setItemPriceSum(orderItem.getItemPriceSum());
+                        item.setShot(orderItem.getShot());
+                        item.setLight(orderItem.getLight());
+
                         itemDtoList.add(item);
                     }
 
@@ -122,6 +126,9 @@ public class OrderRestController {
                 item.setItemPrice(orderItem.getItem().getItemPrice());
                 item.setItemCount(orderItem.getItemCount());
                 item.setItemPriceSum(orderItem.getItemPriceSum());
+                item.setShot(orderItem.getShot());
+                item.setLight(orderItem.getLight());
+
                 itemDtoList.add(item);
             }
             // OrderStreamDto 객체 생성 및 매핑
@@ -176,11 +183,23 @@ public class OrderRestController {
             Item item = Item.builder().itemId(Long.parseLong(orderItemDto.get("itemId").toString())).build();
             Item getItem = itemService.getItem(item);
 
+            Integer shot = 0;
+            if(orderItemDto.get("shot") != null){
+                shot = Integer.parseInt(orderItemDto.get("shot").toString());
+            }
+
+            String light = "";
+            if(orderItemDto.get("light") != null){
+                light = orderItemDto.get("light").toString();
+            }
+
             //주문 상품 생성
             OrderItem orderItem = OrderItem.createOrderItem(getItem,
                     Integer.parseInt(orderItemDto.get("itemPrice").toString()),
                     Integer.parseInt(orderItemDto.get("itemPriceSum").toString()),
-                    Integer.parseInt(orderItemDto.get("itemCount").toString()));
+                    Integer.parseInt(orderItemDto.get("itemCount").toString()),
+                    shot,
+                    light);
 
             //주문 저장
             if(orderDto.getUserId() == null || orderDto.getUserId() == 0){
