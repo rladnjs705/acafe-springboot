@@ -37,12 +37,14 @@ public class MemberJpaRepository {
                         item.itemName,
                         item.itemPrice,
                         item.itemImage,
+                        item.displayYn,
                         category.id.as("categoryId")))
                 .from(item)
                 .leftJoin(item.category, category)
                 .where(
                         itemNameEq(condition.getItemName()),
-                        categoryIdEq(condition.getCategoryId())
+                        categoryIdEq(condition.getCategoryId()),
+                        itemDisplayYnEq(condition.getAdminYn())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -53,7 +55,8 @@ public class MemberJpaRepository {
                 .leftJoin(item.category, category)
                 .where(
                         itemNameEq(condition.getItemName()),
-                        categoryIdEq(condition.getCategoryId())
+                        categoryIdEq(condition.getCategoryId()),
+                        itemDisplayYnEq(condition.getAdminYn())
                 );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
@@ -61,6 +64,14 @@ public class MemberJpaRepository {
 
     private BooleanExpression itemNameEq(String itemName) {
         return StringUtils.hasText(itemName) ? item.itemName.contains(itemName) : null;
+    }
+
+    private BooleanExpression itemDisplayYnEq(String adminYn) {
+        if(adminYn.equals("N")){
+            return item.displayYn.eq("Y");
+        }else{
+            return null;
+        }
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {

@@ -1,5 +1,6 @@
 package com.javadeveloperzone.entity;
 
+import com.javadeveloperzone.domain.Role;
 import com.javadeveloperzone.dto.ItemDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,9 @@ public class Item {
     private Integer itemPrice;
     private String itemImage;
 
+    @Column(columnDefinition = "CHAR(1) DEFAULT 'Y' CHECK (display_yn IN ('Y', 'N'))")
+    private String displayYn;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -41,11 +45,12 @@ public class Item {
     private LocalDateTime updatedDate = LocalDateTime.now();
 
     @Builder
-    public Item(String itemName, Long itemId, Integer itemPrice, String itemImage, Category category) {
+    public Item(String itemName, Long itemId, Integer itemPrice, String itemImage, String displayYn, Category category) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.itemImage = itemImage;
+        this.displayYn = displayYn;
         this.category = category;
     }
 
@@ -53,6 +58,7 @@ public class Item {
         this.itemName = item.getItemName();
         this.itemPrice = item.getItemPrice();
         this.itemImage = item.getItemImage();
+        this.displayYn = item.getDisplayYn();
         this.category = item.getCategory();
     }
 }

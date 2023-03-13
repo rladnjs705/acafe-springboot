@@ -13,8 +13,8 @@ public class QItemDto extends ConstructorExpression<ItemDto> {
 
     private static final long serialVersionUID = 1840456086L;
 
-    public QItemDto(com.querydsl.core.types.Expression<Long> itemId, com.querydsl.core.types.Expression<String> itemName, com.querydsl.core.types.Expression<Integer> itemPrice, com.querydsl.core.types.Expression<String> itemImage, com.querydsl.core.types.Expression<Long> categoryId) {
-        super(ItemDto.class, new Class<?>[]{long.class, String.class, int.class, String.class, long.class}, itemId, itemName, itemPrice, itemImage, categoryId);
+    public QItemDto(com.querydsl.core.types.Expression<Long> itemId, com.querydsl.core.types.Expression<String> itemName, com.querydsl.core.types.Expression<Integer> itemPrice, com.querydsl.core.types.Expression<String> itemImage, com.querydsl.core.types.Expression<String> displayYn, com.querydsl.core.types.Expression<Long> categoryId) {
+        super(ItemDto.class, new Class<?>[]{long.class, String.class, int.class, String.class, String.class, long.class}, itemId, itemName, itemPrice, itemImage, displayYn, categoryId);
     }
 
 }

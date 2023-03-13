@@ -26,22 +26,23 @@ public class ItemJpaRepository extends Querydsl4RepositorySupport {
         super(Item.class);
     }
 
-    public Page<Item> searchPageItem(ItemDto condition, Pageable pageable) {
-        JPQLQuery<Item> query = selectFrom(item)
-                .where(
-                        itemNameEq(condition.getItemName()),
-                        categoryIdEq(condition.getCategoryId())
-                );
-        List<Item> content = getQuerydsl().applyPagination(pageable, query).fetch();
-        return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
-    }
+//    public Page<Item> searchPageItem(ItemDto condition, Pageable pageable) {
+//        JPQLQuery<Item> query = selectFrom(item)
+//                .where(
+//                        itemNameEq(condition.getItemName()),
+//                        categoryIdEq(condition.getCategoryId())
+//                );
+//        List<Item> content = getQuerydsl().applyPagination(pageable, query).fetch();
+//        return PageableExecutionUtils.getPage(content, pageable, query::fetchCount);
+//    }
 
     public Page<Item> applyPagination(ItemDto condition, Pageable pageable){
         return applyPagination(pageable, query->
                 query.selectFrom(item)
                         .where(
                                 itemNameEq(condition.getItemName()),
-                                categoryIdEq(condition.getCategoryId())
+                                categoryIdEq(condition.getCategoryId()),
+                                itemDisplayYnEq(condition.getAdminYn())
                         )
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize()), query ->
@@ -50,13 +51,22 @@ public class ItemJpaRepository extends Querydsl4RepositorySupport {
                         .leftJoin(item.category, category)
                         .where(
                             itemNameEq(condition.getItemName()),
-                            categoryIdEq(condition.getCategoryId())
+                            categoryIdEq(condition.getCategoryId()),
+                            itemDisplayYnEq(condition.getAdminYn())
                         )
                 );
     }
 
     private BooleanExpression itemNameEq(String itemName) {
         return StringUtils.hasText(itemName) ? item.itemName.contains(itemName) : null;
+    }
+
+    private BooleanExpression itemDisplayYnEq(String adminYn) {
+        if(adminYn.equals("N")){
+            return item.displayYn.eq("Y");
+        }else{
+            return null;
+        }
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {

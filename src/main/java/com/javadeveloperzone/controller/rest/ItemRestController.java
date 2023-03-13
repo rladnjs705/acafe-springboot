@@ -70,6 +70,7 @@ public class ItemRestController {
                 itemName(itemDto.getItemName())
                 .itemPrice(itemDto.getItemPrice())
                 .itemImage(itemDto.getItemImage())
+                .displayYn(itemDto.getDisplayYn())
                 .category(category)
                 .build();
 
@@ -102,6 +103,7 @@ public class ItemRestController {
                 .itemName(itemDto.getItemName())
                 .itemPrice(itemDto.getItemPrice())
                 .itemImage(itemDto.getItemImage())
+                .displayYn(itemDto.getDisplayYn())
                 .category(category)
                 .build();
 
